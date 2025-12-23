@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raghad's Personal Portfolio</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { background-color: #ffe6f0; color: #000; line-height: 1.6; transition: 0.3s; }
+    a { text-decoration: none; color: inherit; }
+    header { background: #ff4da6; color: black; padding: 20px 0; text-align: center; }
+    header nav a { margin: 0 15px; font-weight: bold; }
+    section { padding: 60px 20px; max-width: 1000px; margin: auto; }
+    h2 { text-align: center; margin-bottom: 20px; }
+    .dark-mode { background-color: #121212; color: #f4f4f4; }
+    button { cursor: pointer; padding: 10px 20px; margin: 10px 0; border: none; border-radius: 5px; background: #ff4da6; color: black; transition: 0.3s; }
+    button:hover { background: #cc397a; color: white; }
+    input, textarea { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radius: 5px; border: 1px solid #ccc; }
+    footer { text-align: center; padding: 20px; background: #ff4da6; color: black; margin-top: 40px; }
+
+    .skills { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+    .skill { background: #ffb3d9; padding: 10px 20px; border-radius: 20px; }
+
+    .projects { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+    .project { background: #ffcce6; padding: 20px; border-radius: 10px; width: 250px; text-align: center; }
+    .project h3 { margin-bottom: 10px; }
+    .filter-buttons { text-align: center; margin-bottom: 20px; }
+
+    form { max-width: 500px; margin: auto; }
+    .error { color: red; font-size: 0.9em; }
+
+    .dark-mode header, .dark-mode footer { background: #330033; color: white; }
+    .dark-mode .skill { background: #660066; color: white; }
+    .dark-mode .project { background: #660033; color: white; }
+    .dark-mode button { background: #330033; color: white; }
+    .dark-mode button:hover { background: #660066; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Raghad</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button id="darkModeBtn">Toggle Dark Mode</button>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I am a student passionate about personal and professional growth. I strive to acquire new skills in technology and artificial intelligence, pursue continuous learning, and maintain a balance between ambition and achievement, with a love for knowledge and organized work.</p>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills">
+      <div class="skill">HTML</div>
+      <div class="skill">CSS</div>
+      <div class="skill">JavaScript</div>
+      <div class="skill">Python</div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="filter-buttons">
+      <button onclick="filterProjects('all')">All</button>
+      <button onclick="filterProjects('web')">Web</button>
+      <button onclick="filterProjects('python')">Python</button>
+      <button onclick="filterProjects('design')">Design</button>
+    </div>
+    <div class="projects" id="projectContainer"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <form id="contactForm">
+      <input type="text" id="name" placeholder="Your Name">
+      <span class="error" id="nameError"></span>
+      <input type="email" id="email" placeholder="Your Email">
+      <span class="error" id="emailError"></span>
+      <textarea id="message" placeholder="Your Message"></textarea>
+      <span class="error" id="messageError"></span>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <footer>
+    &copy; Raghad 2025
+  </footer>
+
+  <script>
+    // Dark Mode
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    if(localStorage.getItem('darkMode') === 'enabled'){
+      document.body.classList.add('dark-mode');
+    }
+    darkModeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    });
+
+    // Projects
+    const projects = [
+      { title: 'Portfolio Website', category: 'web', description: 'A personal portfolio website using HTML, CSS, JS.' },
+      { title: 'Calculator', category: 'web', description: 'Simple calculator built with JS.' },
+      { title: 'AI Chatbot', category: 'python', description: 'Python AI chatbot using NLP.' },
+      { title: 'Logo Design', category: 'design', description: 'Creative logo design project.' }
+    ];
+
+    const projectContainer = document.getElementById('projectContainer');
+
+    function displayProjects(list){
+      projectContainer.innerHTML = '';
+      list.forEach(p => {
+        const div = document.createElement('div');
+        div.classList.add('project');
+        div.innerHTML = `<h3>${p.title}</h3><p>${p.description}</p>`;
+        projectContainer.appendChild(div);
+      });
+    }
+
+    function filterProjects(category){
+      if(category === 'all'){
+        displayProjects(projects);
+      } else {
+        displayProjects(projects.filter(p => p.category === category));
+      }
+    }
+
+    displayProjects(projects);
+
+    // Form Validation
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      const name = document.getElementById('name');
+      const email = document.getElementById('email');
+      const message = document.getElementById('message');
+
+      document.getElementById('nameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('messageError').textContent = '';
+
+      if(name.value.trim() === ''){
+        document.getElementById('nameError').textContent = 'Name is required';
+        valid = false;
+      }
+      if(email.value.trim() === '' || !email.value.includes('@')){
+        document.getElementById('emailError').textContent = 'Valid email is required';
+        valid = false;
+      }
+      if(message.value.trim() === ''){
+        document.getElementById('messageError').textContent = 'Message cannot be empty';
+        valid = false;
+      }
+
+      if(valid){
+        alert('Message sent successfully!');
+        form.reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
